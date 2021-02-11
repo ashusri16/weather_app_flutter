@@ -9,13 +9,15 @@ part 'weather_event.dart';
 part 'weather_state.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
-  WeatherBloc() : super(WeatherInitial(""));
+  WeatherBloc() : super(WeatherInitial("", false));
 
   @override
   Stream<WeatherState> mapEventToState(
     WeatherEvent event,
   ) async* {
-    yield WeatherLoading("");
+    var url;
+    var isUsingLiveLocation;
+    yield WeatherLoading("", false);
     var locationId;
     if (event is LoadPune) {
       locationId = "1259229";
@@ -26,14 +28,20 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     } else if (event is LoadNagpur) {
       locationId = "1262180";
     }
-
-    var url =
-        "https://api.openweathermap.org/data/2.5/weather?id=$locationId&appid=fa5b22b38f1f2433d0b7a6efa01f365e";
+    if (event is LoadCurrentLocation) {
+      url =
+          "https://api.openweathermap.org/data/2.5/weather?lat=${event.latitude}&lon=${event.longitude}&appid=fa5b22b38f1f2433d0b7a6efa01f365e";
+      isUsingLiveLocation = true;
+    } else {
+      url =
+          "https://api.openweathermap.org/data/2.5/weather?id=$locationId&appid=fa5b22b38f1f2433d0b7a6efa01f365e";
+      isUsingLiveLocation = false;
+    }
+    print(url);
     var response = await http.get(url);
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
-      print("DataLoaded");
-      yield WeatherLoaded(jsonResponse);
+      yield WeatherLoaded(jsonResponse, isUsingLiveLocation);
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }

@@ -12,6 +12,9 @@ class WeatherPage extends StatelessWidget {
     final deviceWidth = MediaQuery.of(context).size.width;
     return BlocBuilder<WeatherBloc, WeatherState>(
       builder: (context, state) {
+        if (state is WeatherInitial) {
+          BlocProvider.of<WeatherBloc>(context).add(LoadPune());
+        }
         return Scaffold(
           backgroundColor: Colors.blue[500],
           appBar: AppBar(

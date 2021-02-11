@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:weather_app/bloc/weather_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
@@ -27,8 +28,8 @@ class _LocationSelectorState extends State<LocationSelector> {
                 dropdownColor: Colors.blue[300],
                 value: dropdownValue,
                 hint: Text(
-                  "--select--",
-                  style: TextStyle(fontSize: 18, color: Colors.white70),
+                  "Pune",
+                  style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
                 icon: Icon(
                   Icons.cloud,
@@ -91,8 +92,38 @@ class _LocationSelectorState extends State<LocationSelector> {
                       BlocProvider.of<WeatherBloc>(context).add(LoadNagpur());
                     },
                   ),
+                  DropdownMenuItem<String>(
+                    value: "Live Location",
+                    child: Text(
+                      "Live Location",
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.center,
+                    ),
+                    onTap: () async {
+                      Position position = await Geolocator.getCurrentPosition(
+                          desiredAccuracy: LocationAccuracy.low);
+                      print(position.longitude);
+                      print(position.latitude);
+                      String lon = position.longitude.toString();
+                      String lat = position.latitude.toString();
+                      BlocProvider.of<WeatherBloc>(context).add(
+                          LoadCurrentLocation(longitude: lon, latitude: lat));
+                    },
+                  ),
                 ],
               ),
+            ),
+            SizedBox(
+              height: 30,
+              child: state.isUsingLiveLocation
+                  ? Text(
+                      state.responseData['name'].toString(),
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white),
+                    )
+                  : Container(),
             ),
             (state is WeatherInitial || state is WeatherLoading)
                 ? Container()

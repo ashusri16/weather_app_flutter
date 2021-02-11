@@ -10,3 +10,10 @@ class LoadNasik extends WeatherEvent {}
 class LoadMumbai extends WeatherEvent {}
 
 class LoadNagpur extends WeatherEvent {}
+
+class LoadCurrentLocation extends WeatherEvent {
+  final String latitude;
+  final String longitude;
+
+  LoadCurrentLocation({this.latitude, this.longitude});
+}
