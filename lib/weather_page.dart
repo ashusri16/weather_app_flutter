@@ -62,14 +62,13 @@ class WeatherPage extends StatelessWidget {
                                   color: Colors.blue,
                                 ),
                                 title: "Min Temp",
-                                data: (state is WeatherInitial ||
-                                        state is WeatherLoading)
-                                    ? "0"
-                                    : num.parse((state.responseData['main']
+                                data: (state is WeatherLoaded)
+                                    ? num.parse((state.responseData['main']
                                                     ['temp_min'] -
                                                 273.0)
                                             .toStringAsFixed(2))
-                                        .toString(),
+                                        .toString()
+                                    : "0",
                                 unit: "°c",
                               ),
                             ),
@@ -84,14 +83,13 @@ class WeatherPage extends StatelessWidget {
                                   size: 50,
                                   color: Colors.red,
                                 ),
-                                data: (state is WeatherInitial ||
-                                        state is WeatherLoading)
-                                    ? "0"
-                                    : num.parse((state.responseData['main']
+                                data: (state is WeatherLoaded)
+                                    ? num.parse((state.responseData['main']
                                                     ['temp_max'] -
                                                 273.0)
                                             .toStringAsFixed(2))
-                                        .toString(),
+                                        .toString()
+                                    : "0",
                                 unit: "°c",
                               ),
                             )
@@ -114,11 +112,10 @@ class WeatherPage extends StatelessWidget {
                                   color: Colors.blue,
                                 ),
                                 title: "Humidity",
-                                data: (state is WeatherInitial ||
-                                        state is WeatherLoading)
-                                    ? "0"
-                                    : (state.responseData['wind']['speed'])
-                                        .toString(),
+                                data: (state is WeatherLoaded)
+                                    ? (state.responseData['wind']['speed'])
+                                        .toString()
+                                    : "0",
                                 unit: "%",
                               ),
                             ),
@@ -133,11 +130,10 @@ class WeatherPage extends StatelessWidget {
                                   size: 50,
                                   color: Colors.blue,
                                 ),
-                                data: (state is WeatherInitial ||
-                                        state is WeatherLoading)
-                                    ? "0"
-                                    : (state.responseData['main']['humidity'])
-                                        .toString(),
+                                data: (state is WeatherLoaded)
+                                    ? (state.responseData['main']['humidity'])
+                                        .toString()
+                                    : "0",
                                 unit: "mph",
                               ),
                             )

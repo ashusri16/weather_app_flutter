@@ -9,7 +9,7 @@ part 'weather_event.dart';
 part 'weather_state.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
-  WeatherBloc() : super(WeatherInitial("", false));
+  WeatherBloc() : super(WeatherInitial());
 
   @override
   Stream<WeatherState> mapEventToState(
@@ -17,7 +17,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   ) async* {
     var url;
     var isUsingLiveLocation;
-    yield WeatherLoading("", false);
+    yield WeatherLoading();
     var locationId;
     if (event is LoadPune) {
       locationId = "1259229";
@@ -37,13 +37,13 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
           "https://api.openweathermap.org/data/2.5/weather?id=$locationId&appid=fa5b22b38f1f2433d0b7a6efa01f365e";
       isUsingLiveLocation = false;
     }
-    print(url);
     var response = await http.get(url);
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
       yield WeatherLoaded(jsonResponse, isUsingLiveLocation);
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      yield WeatherLoadError(
+          "Loading failed with error code: ${response.statusCode}");
     }
   }
 }

@@ -113,29 +113,30 @@ class _LocationSelectorState extends State<LocationSelector> {
                 ],
               ),
             ),
-            SizedBox(
-              height: 30,
-              child: state.isUsingLiveLocation
-                  ? Text(
-                      state.responseData['name'].toString(),
-                      style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white),
-                    )
-                  : Container(),
-            ),
-            (state is WeatherInitial || state is WeatherLoading)
-                ? Container()
-                : _showWeatherCondition(
-                    state.responseData['weather'][0]['main'].toString()),
+            state is WeatherLoaded
+                ? SizedBox(
+                    height: 30,
+                    child: state.isUsingLiveLocation
+                        ? Text(
+                            state.responseData['name'].toString(),
+                            style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.white),
+                          )
+                        : Container(),
+                  )
+                : Container(),
+            (state is WeatherLoaded)
+                ? _showWeatherCondition(
+                    state.responseData['weather'][0]['main'].toString())
+                : Container(),
             SizedBox(
               height: 30,
               child: Text(
-                (state is WeatherInitial || state is WeatherLoading)
-                    ? ""
-                    : state.responseData['weather'][0]['description']
-                        .toString(),
+                (state is WeatherLoaded)
+                    ? state.responseData['weather'][0]['description'].toString()
+                    : "",
                 style: TextStyle(
                   color: Colors.white70,
                   fontSize: 24,

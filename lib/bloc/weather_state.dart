@@ -2,27 +2,24 @@ part of 'weather_bloc.dart';
 
 @immutable
 abstract class WeatherState {
-  final responseData;
-  final bool isUsingLiveLocation;
-  WeatherState(this.responseData, this.isUsingLiveLocation);
+  const WeatherState();
 }
 
 class WeatherInitial extends WeatherState {
-  WeatherInitial(responseData, isUsingLiveLocation)
-      : super(responseData, isUsingLiveLocation);
+  const WeatherInitial();
 }
 
 class WeatherLoading extends WeatherState {
-  WeatherLoading(responseData, isUsingLiveLocation)
-      : super(responseData, isUsingLiveLocation);
+  const WeatherLoading();
 }
 
 class WeatherLoaded extends WeatherState {
-  WeatherLoaded(responseData, isUsingLiveLocation)
-      : super(responseData, isUsingLiveLocation);
+  final responseData;
+  final isUsingLiveLocation;
+  const WeatherLoaded(this.responseData, this.isUsingLiveLocation);
 }
 
 class WeatherLoadError extends WeatherState {
-  WeatherLoadError(responseData, isUsingLiveLocation)
-      : super(responseData, isUsingLiveLocation);
+  final String errorMessage;
+  WeatherLoadError(this.errorMessage);
 }
